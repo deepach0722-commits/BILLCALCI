@@ -3,351 +3,678 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>⚡ Smart Energy Bill Calculator</title>
+<title>Smart Energy Bill Calculator — Multilang + AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  background: linear-gradient(135deg, #c9ffbf, #ffafbd);
-  color: #222;
-}
-header {
-  background: #0077b6;
-  color: white;
-  padding: 16px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-}
-.container {
-  max-width: 950px;
-  margin: 20px auto;
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-}
-select, input, button {
-  padding: 8px;
-  font-size: 15px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-button {
-  cursor: pointer;
-  background: #0077b6;
-  color: white;
-  border: none;
-  transition: 0.2s;
-}
-button:hover { background: #005f8a; }
-.controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-.device-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-}
-.remove-btn { background: #ff4b5c; }
-.results {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 20px;
-}
-.card {
-  background: #f4f8fb;
-  border-radius: 10px;
-  padding: 16px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
-.ai-chat {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 300px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-.chat-header {
-  background: #0077b6;
-  color: white;
-  text-align: center;
-  padding: 10px;
-  font-weight: bold;
-}
-.chat-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px;
-  font-size: 14px;
-}
-.chat-body div { margin-bottom: 8px; }
-.chat-input {
-  display: flex;
-  border-top: 1px solid #ccc;
-}
-.chat-input input {
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 8px;
-}
-.chat-input button {
-  background: #0077b6;
-  border: none;
-  color: white;
-  padding: 8px 12px;
-}
-.lang-region {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
+  :root{
+    --accent:#0077b6;
+    --accent-2:#00b4d8;
+    --card-bg:#ffffffdd;
+  }
+  body{
+    font-family: "Poppins", sans-serif;
+    margin:0; background: linear-gradient(135deg,#d4fc79,#96e6a1);
+    color:#122;
+  }
+  header{
+    background: linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:white; padding:18px; text-align:center;
+    box-shadow:0 6px 18px rgba(0,0,0,0.15);
+  }
+  .container{
+    max-width:1100px; margin:20px auto; padding:18px;
+    background:var(--card-bg); border-radius:14px; box-shadow:0 8px 28px rgba(0,0,0,0.12);
+  }
+  .top-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
+  label{ font-weight:600; margin-right:6px; }
+  select,input,button{ padding:8px 10px; font-size:14px; border-radius:8px; border:1px solid #cfd8dc; }
+  button{ cursor:pointer; background:var(--accent); color:white; border:none; }
+  .controls{ display:flex; gap:8px; margin:12px 0; flex-wrap:wrap; }
+  .devices{ margin-top:12px; }
+  .device-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px; padding:8px; border-radius:10px; background: #fbffff; }
+  .device-row img.icon { width:36px; height:36px; object-fit:contain; border-radius:6px; }
+  .device-row select, .device-row input { min-width:160px; }
+  .remove-btn { background:#ff6b6b; color:white; padding:8px 10px; border-radius:8px; border:none;}
+  .cards { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+  .card { background:white; padding:14px; border-radius:12px; box-shadow:0 4px 14px rgba(0,0,0,0.06); }
+  .card h3 { margin:0 0 10px 0; color:var(--accent); }
+  .results-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .appliance-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #eee; }
+  .appliance-row:last-child { border-bottom:none; }
+  .awareness { margin-top:18px; display:flex; gap:12px; align-items:center; padding:10px; background:#f2fff4; border-radius:10px; }
+  .awareness img { width:72px; height:72px; }
+  .tips { margin-top:12px; }
+  /* AI Chat */
+  .ai-chat { position:fixed; bottom:20px; right:20px; width:340px; max-width:92%; background:white; border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.2); overflow:hidden; display:flex; flex-direction:column; }
+  .ai-header { background:var(--accent); color:white; padding:10px; font-weight:600; display:flex; justify-content:space-between; align-items:center; }
+  .ai-body { padding:10px; height:320px; overflow:auto; font-size:14px; }
+  .ai-input { display:flex; border-top:1px solid #eee; }
+  .ai-input input { flex:1; border:none; padding:10px; }
+  .ai-input button { padding:10px; background:var(--accent-2); color:white; border:none; cursor:pointer; }
+  .msg-user { text-align:right; color:#045; margin:6px 0;}
+  .msg-bot { text-align:left; color:#222; margin:6px 0; }
+  .badge { background:#e8f4ff; color:var(--accent); padding:6px 8px; border-radius:8px; font-weight:600; }
+  .ratings { display:flex; gap:6px; align-items:center; }
+  .small { font-size:13px; color:#555; }
+  @media(max-width:900px){ .cards{ grid-template-columns:1fr; } .ai-chat{ right:10px; bottom:10px; width:320px; } }
 </style>
 </head>
 <body>
 <header id="headerText">⚡ Smart Energy Bill Calculator</header>
 
 <div class="container">
-  <div class="lang-region">
-    <label><span id="langLabel">🌐 Language:</span>
-      <select id="language">
-        <option value="en">English</option>
-        <option value="hi">हिन्दी</option>
-        <option value="te">తెలుగు</option>
-        <option value="ta">தமிழ்</option>
-      </select>
-    </label>
-    <label><span id="regionLabel">📍 Region:</span>
-      <select id="region">
-        <option value="ap">Andhra Pradesh</option>
-        <option value="tn">Tamil Nadu</option>
-        <option value="mh">Maharashtra</option>
-      </select>
-    </label>
-  </div>
+  <div class="top-row">
+    <label id="langLabel">Language</label>
+    <select id="language">
+      <option value="en">English</option>
+      <option value="hi">हिन्दी</option>
+      <option value="te">తెలుగు</option>
+      <option value="ta">தமிழ்</option>
+    </select>
 
-  <div id="devices"></div>
+    <label id="regionLabel">Region</label>
+    <select id="region">
+      <option value="delhi">Delhi</option>
+      <option value="tamilnadu">Tamil Nadu</option>
+      <option value="kerala">Kerala</option>
+      <option value="generic">Generic India</option>
+    </select>
+
+    <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+      <span class="badge" id="currLangBadge">EN</span>
+      <button id="helpBtn" title="Open Assistant">Assistant</button>
+    </div>
+  </div>
 
   <div class="controls">
-    <button id="addDevice">+ Add Appliance</button>
-    <button id="calculate">Calculate</button>
-    <button id="reset">Reset</button>
+    <button id="addDeviceBtn">+ Add Appliance</button>
+    <button id="calculateBtn">Calculate</button>
+    <button id="resetBtn" style="background:#ff6b6b">Reset</button>
   </div>
 
-  <div class="results" id="resultsArea" style="display:none;">
-    <div class="card" id="deviceDetails">
-      <h3 id="deviceTitle">Device-wise Details</h3>
+  <div class="devices" id="devices"></div>
+
+  <div class="cards" id="resultsArea" style="display:none;">
+    <div class="card">
+      <h3 id="deviceDetailsTitle">Appliance-wise Energy & Cost</h3>
       <div id="deviceList"></div>
     </div>
-    <div class="card" id="summary">
-      <h3 id="summaryTitle">Summary</h3>
+
+    <div class="card">
+      <h3 id="summaryTitle">Summary & Suggestions</h3>
       <div id="summaryContent"></div>
+      <div id="suggestions" style="margin-top:10px;"></div>
+      <div id="tips" class="tips"></div>
+    </div>
+  </div>
+
+  <div class="awareness" style="margin-top:18px;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2913/2913465.png" alt="save" />
+    <div>
+      <div id="awarenessHeading" style="font-weight:700">Save Electricity — Save Earth</div>
+      <div id="awarenessText" class="small">Turn off unused devices, use efficient appliances and avoid peak hours.</div>
     </div>
   </div>
 </div>
 
 <!-- AI Chat -->
-<div class="ai-chat" id="aiChat">
-  <div class="chat-header" id="chatHeader">🤖 Smart Energy Assistant</div>
-  <div class="chat-body" id="chatBody">
-    <div><strong>AI:</strong> Hi! Ask me about tariffs, how to save power, or your bill.</div>
+<div class="ai-chat" id="aiChat" aria-hidden="false">
+  <div class="ai-header">
+    <div id="aiTitle">Energy Assistant</div>
+    <div id="aiClose" style="cursor:pointer; opacity:0.9;">✖</div>
   </div>
-  <div class="chat-input">
-    <input id="userMsg" placeholder="Ask your question..." />
-    <button id="sendMsg">Send</button>
+  <div class="ai-body" id="aiBody">
+    <div class="msg-bot" id="aiWelcome">Hello — ask me anything about tariff slabs, bills, ratings, or how to save electricity.</div>
+  </div>
+  <div class="ai-input">
+    <input id="aiInput" placeholder="Ask (example: What are Delhi slabs?)" />
+    <button id="aiSend">Send</button>
   </div>
 </div>
 
 <script>
-// ----------- Multi-language Texts -----------
-const translations = {
+/* ===========================
+   TRANSLATIONS / TEXT DATA
+   =========================== */
+const TEXT = {
   en: {
     header: "⚡ Smart Energy Bill Calculator",
-    lang: "🌐 Language:",
-    region: "📍 Region:",
-    add: "+ Add Appliance",
-    calc: "Calculate",
+    langLabel: "Language",
+    regionLabel: "Region",
+    addDevice: "+ Add Appliance",
+    calculate: "Calculate",
     reset: "Reset",
-    deviceTitle: "Device-wise Details",
-    summaryTitle: "Summary",
-    aiWelcome: "Hi! Ask me about tariffs, how to save power, or your bill.",
+    deviceDetailsTitle: "Appliance-wise Energy & Cost",
+    summaryTitle: "Summary & Suggestions",
+    awarenessHeading: "Save Electricity — Save Earth",
+    awarenessText: "Turn off unused devices, use efficient appliances and avoid peak hours.",
+    aiWelcome: "Hello — ask me anything about tariff slabs, bills, ratings, or how to save electricity.",
+    tipsHeading: "Tips & Awareness",
+    ratingInfo5: "5★ appliances (energy-efficient) consume significantly less electricity than 3★ models.",
+    ratingInfo3: "3★ appliances are older or less efficient — consider replacing if you run them many hours/day.",
+    suggestionHeader: "Recommendations to reduce consumption",
+    savingsEstimate: "Estimated monthly savings if follow suggestions"
   },
   hi: {
-    header: "⚡ स्मार्ट ऊर्जा बिल कैलकुलेटर",
-    lang: "🌐 भाषा:",
-    region: "📍 क्षेत्र:",
-    add: "+ उपकरण जोड़ें",
-    calc: "गणना करें",
+    header: "⚡ स्मार्ट एनर्जी बिल कैलक्युलेटर",
+    langLabel: "भाषा",
+    regionLabel: "क्षेत्र",
+    addDevice: "+ उपकरण जोड़ें",
+    calculate: "गणना करें",
     reset: "रीसेट",
-    deviceTitle: "उपकरण विवरण",
-    summaryTitle: "सारांश",
-    aiWelcome: "नमस्ते! मुझसे टैरिफ, बिजली बचाने या बिल के बारे में पूछें।",
+    deviceDetailsTitle: "उपकरण अनुसार ऊर्जा एवं लागत",
+    summaryTitle: "सारांश और सुझाव",
+    awarenessHeading: "बिजली बचाएं — पृथ्वी बचाएं",
+    awarenessText: "अनावश्यक उपकरण बंद करें, कुशल उपकरणों का उपयोग करें और पीक घंटे से बचें।",
+    aiWelcome: "नमस्ते — मुझसे टैरिफ स्लैब, बिल, रेटिंग या बिजली बचत के बारे में पूछें।",
+    tipsHeading: "सुझाव और जागरूकता",
+    ratingInfo5: "5★ उपकरण (ऊर्जा-कुशल) 3★ की तुलना में कम बिजली खर्च करते हैं।",
+    ratingInfo3: "3★ उपकरण कम कुशल होते हैं — यदि आप इन्हें अधिक घंटे चलाते हैं तो बदलना विचार करें।",
+    suggestionHeader: "उपभोग घटाने के सुझाव",
+    savingsEstimate: "यदि सुझाव अपनाएँ तो अनुमानित मासिक बचत"
   },
   te: {
     header: "⚡ స్మార్ట్ ఎనర్జీ బిల్ కాలిక్యులేటర్",
-    lang: "🌐 భాష:",
-    region: "📍 ప్రాంతం:",
-    add: "+ పరికరం జోడించు",
-    calc: "లెక్కించు",
-    reset: "రీసెట్",
-    deviceTitle: "పరికర వివరాలు",
-    summaryTitle: "సారాంశం",
-    aiWelcome: "హలో! టారిఫ్‌లు, విద్యుత్ పొదుపు లేదా బిల్ గురించి అడగండి.",
+    langLabel: "భాష",
+    regionLabel: "ప్రాంతం",
+    addDevice: "+ పరికరం జోడించు",
+    calculate: "లెక్కించు",
+    reset: "రిసెట్",
+    deviceDetailsTitle: "పరికరం వారీ ఎనర్జీ & ఖర్చు",
+    summaryTitle: "సారాంశం & సలహాలు",
+    awarenessHeading: "విద్యుత్ పొదుపు — ప్రపంచం కాపాడు",
+    awarenessText: "వాడని పరికరాలు ఆపండి, సామర్థ్యవంతమైన పరికరాలు వాడండి, పీక్ గంటల నుండి దూరంగా ఉండండి.",
+    aiWelcome: "హలో — టారిఫ్ స్లాబులు, బిల్లు, రేటింగ్స్ లేదా విద్యుత్ పొదుపు గురించి అడగండి.",
+    tipsHeading: "సలహాలు & అవగాహన",
+    ratingInfo5: "5★ పరికరాలు (శక్తి-దక్ష) 3★ కంటే తక్కువ విద్యుత్ ఖర్చు చేసే అవకాశముంది.",
+    ratingInfo3: "3★ పరికరాలు తక్కువ సమర్థవంతంగా ఉంటాయి — ఎక్కువ గంటలు నడిపిస్తే మార్చుకోవచ్చు.",
+    suggestionHeader: "వాడకం తగ్గించే సిఫార్సులు",
+    savingsEstimate: "సిఫార్సులు పాటిస్తే అంచనా వారీ నెలవారీ ఆదా"
   },
   ta: {
-    header: "⚡ ஸ்மார்ட் மின்சார கட்டண கணக்கீட்டாளர்",
-    lang: "🌐 மொழி:",
-    region: "📍 பகுதி:",
-    add: "+ சாதனம் சேர்க்கவும்",
-    calc: "கணக்கிடு",
+    header: "⚡ ஸ்மார்ட் மின்சார கட்டண கணக்கீட்டர்",
+    langLabel: "மொழி",
+    regionLabel: "மகுதம்",
+    addDevice: "+ சாதனம் சேர்க்கவும்",
+    calculate: "கணக்கிடு",
     reset: "மீட்டமைக்கவும்",
-    deviceTitle: "சாதன விவரங்கள்",
-    summaryTitle: "சுருக்கம்",
-    aiWelcome: "வணக்கம்! கட்டணங்கள், மின்சாரம் சேமிப்பு அல்லது பில்லைக் குறித்து கேளுங்கள்.",
+    deviceDetailsTitle: "சாதன வாரியான மின்சாரம் & செலவு",
+    summaryTitle: "சுருக்கம் & பரிந்துரைகள்",
+    awarenessHeading: "மின்சாரம் சேமி — பூமியை காப்பாற்று",
+    awarenessText: "பயன்பாடு இல்லாத சாதனங்களை அணைக்கவும், திறமையான சாதனங்களைப் பயன்படுத்தவும்.",
+    aiWelcome: "வணக்கம் — கட்டணங்கள், பில்ல்கள், ரேட்டிங் அல்லது மின்சாரம் குறைப்பை பற்றி கேளுங்கள்.",
+    tipsHeading: "உதவிக்குறிப்புகள் & விழிப்புணர்வு",
+    ratingInfo5: "5★ சாதனங்கள் (மின்சார திறமையானவை) 3★ கொள்கையுடன் குறைவாக மின்சாரம் பயன்படுத்தும்.",
+    ratingInfo3: "3★ சாதனங்கள் குறைந்த திறன் கொண்டவை — நீண்ட நேரம் பயன்படுத்தினால் மாற்றத்தை பரிசீலிக்கவும்.",
+    suggestionHeader: "மின்சாரம் குறைக்கும் பரிந்துரைகள்",
+    savingsEstimate: "இவை பின்பற்றினால் மாதாந்திர சேமிப்பு"
   }
 };
 
-// ----------- Region-wise slabs -----------
-const regionSlabs = {
-  ap: [[50, 1.5], [100, 3.0], [200, 5.0], [Infinity, 7.0]],
-  tn: [[100, 2.0], [200, 3.5], [500, 6.0], [Infinity, 8.0]],
-  mh: [[100, 3.0], [300, 5.5], [500, 7.0], [Infinity, 9.0]]
+/* ===========================
+   REGION-SPECIFIC SLABS (progressive)
+   Each entry: array of { upto: X, rate: ₹/unit }
+   Example values — update to actual tariffs as required
+   =========================== */
+const REGION_DATA = {
+  delhi: {
+    slabs: [
+      { upto: 200, rate: 3.00 },
+      { upto: 400, rate: 4.50 },
+      { upto: 800, rate: 6.50 },
+      { upto: 1200, rate: 7.00 },
+      { upto: Infinity, rate: 8.00 }
+    ],
+    fixedPerKW: 20
+  },
+  tamilnadu: {
+    slabs: [
+      { upto: 100, rate: 2.00 },
+      { upto: 200, rate: 3.50 },
+      { upto: 500, rate: 6.00 },
+      { upto: Infinity, rate: 8.00 }
+    ],
+    fixedPerKW: 30
+  },
+  kerala: {
+    slabs: [
+      { upto: 40, rate: 1.50 },
+      { upto: 100, rate: 4.25 },
+      { upto: 150, rate: 5.50 },
+      { upto: 250, rate: 7.20 },
+      { upto: Infinity, rate: 9.20 }
+    ],
+    fixedPerKW: 50
+  },
+  generic: {
+    slabs: [
+      { upto: 300, rate: 5.00 },
+      { upto: 600, rate: 7.50 },
+      { upto: Infinity, rate: 10.00 }
+    ],
+    fixedPerKW: 40
+  }
 };
 
-// ----------- Appliance Power -----------
-const applianceWatts = {
-  "Fan": 75,
-  "Tube Light": 40,
-  "LED Bulb": 10,
-  "Air Conditioner": 1200,
-  "Refrigerator": 150,
-  "Laptop": 60,
-  "TV": 120,
-  "Washing Machine": 500,
-  "Microwave": 1000
+/* ===========================
+   APPLIANCE ICONS & DEFAULT WATTS
+   and sample rating (3 or 5 star)
+   =========================== */
+const APPLIANCES = {
+  "Fan": { w:75, icon: "https://cdn-icons-png.flaticon.com/512/447/447951.png", rating:5 },
+  "Tube Light": { w:40, icon: "https://cdn-icons-png.flaticon.com/512/2913/2913479.png", rating:3 },
+  "LED Bulb": { w:10, icon: "https://cdn-icons-png.flaticon.com/512/2942/2942877.png", rating:5 },
+  "Air Conditioner": { w:1200, icon: "https://cdn-icons-png.flaticon.com/512/1968/1968157.png", rating:3 },
+  "Refrigerator": { w:150, icon: "https://cdn-icons-png.flaticon.com/512/2917/2917242.png", rating:5 },
+  "Laptop": { w:60, icon: "https://cdn-icons-png.flaticon.com/512/3793/3793465.png", rating:5 },
+  "TV": { w:120, icon: "https://cdn-icons-png.flaticon.com/512/2920/2920011.png", rating:3 },
+  "Washing Machine": { w:500, icon: "https://cdn-icons-png.flaticon.com/512/2917/2917476.png", rating:3 },
+  "Microwave": { w:1000, icon: "https://cdn-icons-png.flaticon.com/512/3075/3075977.png", rating:3 },
+  "Iron": { w:800, icon: "https://cdn-icons-png.flaticon.com/512/2917/2917011.png", rating:3 },
+  "Water Heater": { w:1500, icon: "https://cdn-icons-png.flaticon.com/512/2917/2917047.png", rating:3 }
 };
 
-// ----------- Language change handler -----------
-const languageSelect = document.getElementById('language');
-languageSelect.addEventListener('change', changeLanguage);
-
-function changeLanguage() {
-  const lang = languageSelect.value;
-  const t = translations[lang];
-  document.getElementById('headerText').innerText = t.header;
-  document.getElementById('langLabel').innerText = t.lang;
-  document.getElementById('regionLabel').innerText = t.region;
-  document.getElementById('addDevice').innerText = t.add;
-  document.getElementById('calculate').innerText = t.calc;
-  document.getElementById('reset').innerText = t.reset;
-  document.getElementById('deviceTitle').innerText = t.deviceTitle;
-  document.getElementById('summaryTitle').innerText = t.summaryTitle;
-  document.getElementById('chatHeader').innerText = "🤖 " + t.header;
-  document.getElementById('chatBody').innerHTML = `<div><strong>AI:</strong> ${t.aiWelcome}</div>`;
+/* ===========================
+   Helper: progressive billing
+   Units are billed progressively across slabs.
+   Returns { cost, breakdown: [ {used, rate, cost} ], fixedCharge }
+   =========================== */
+function computeProgressiveBill(units, regionKey, installedLoadKW=0) {
+  const region = REGION_DATA[regionKey] || REGION_DATA.generic;
+  let remaining = units;
+  let prevLimit = 0;
+  let totalCost = 0;
+  const breakdown = [];
+  for (const slab of region.slabs) {
+    const slabCap = isFinite(slab.upto) ? (slab.upto - prevLimit) : Infinity;
+    const used = Math.max(0, Math.min(remaining, slabCap));
+    if (used > 0) {
+      const cost = used * slab.rate;
+      breakdown.push({ used, rate: slab.rate, cost });
+      totalCost += cost;
+      remaining -= used;
+    }
+    prevLimit = slab.upto;
+    if (remaining <= 0) break;
+  }
+  const fixedCharge = (installedLoadKW || 0) * region.fixedPerKW;
+  return { cost: totalCost + fixedCharge, energyCost: totalCost, fixedCharge, breakdown };
 }
 
-// ----------- Device row creation -----------
+/* ===========================
+   Estimation for manual appliance names
+   =========================== */
+function estimateWattsFromName(name) {
+  const n = name.toLowerCase();
+  if (n.includes("ac") || n.includes("air")) return 1200;
+  if (n.includes("heater") || n.includes("geyser")) return 1500;
+  if (n.includes("fan")) return 75;
+  if (n.includes("bulb") || n.includes("light")) return 12;
+  if (n.includes("tv")) return 120;
+  if (n.includes("laptop") || n.includes("computer")) return 60;
+  if (n.includes("fridge") || n.includes("refrigerator")) return 150;
+  if (n.includes("microwave")) return 1000;
+  if (n.includes("iron")) return 800;
+  if (n.includes("wash") || n.includes("washing")) return 500;
+  if (n.includes("pump")) return 500;
+  return 150; // fallback
+}
+
+/* ===========================
+   Build UI and interactions
+   =========================== */
 const devicesDiv = document.getElementById('devices');
-function createDeviceRow() {
+const addDeviceBtn = document.getElementById('addDeviceBtn');
+const calculateBtn = document.getElementById('calculateBtn');
+const resetBtn = document.getElementById('resetBtn');
+const resultsArea = document.getElementById('resultsArea');
+const deviceListEl = document.getElementById('deviceList');
+const summaryContent = document.getElementById('summaryContent');
+const suggestionsEl = document.getElementById('suggestions');
+const tipsEl = document.getElementById('tips');
+const headerText = document.getElementById('headerText');
+const currLangBadge = document.getElementById('currLangBadge');
+const langSelect = document.getElementById('language');
+const regionSelect = document.getElementById('region');
+
+let currentLang = 'en';
+function t(key){ return TEXT[currentLang][key] || TEXT.en[key] || key; }
+
+/* apply translations to visible static texts */
+function applyTranslations(){
+  headerText.innerText = t('header');
+  document.getElementById('langLabel').innerText = t('langLabel');
+  document.getElementById('regionLabel').innerText = t('regionLabel');
+  addDeviceBtn.innerText = t('addDevice');
+  calculateBtn.innerText = t('calculate');
+  resetBtn.innerText = t('reset');
+  document.getElementById('deviceDetailsTitle').innerText = t('deviceDetailsTitle');
+  document.getElementById('summaryTitle').innerText = t('summaryTitle');
+  document.getElementById('awarenessHeading').innerText = t('awarenessHeading');
+  document.getElementById('awarenessText').innerText = t('awarenessText');
+  document.getElementById('aiWelcome').innerText = t('aiWelcome');
+  currLangBadge.innerText = currentLang.toUpperCase();
+}
+
+/* create one device input row */
+function createDeviceRow(initial={}){
   const row = document.createElement('div');
   row.className = 'device-row';
-  let opts = `<option value="">Select Appliance</option>`;
-  for (const a in applianceWatts) opts += `<option value="${a}">${a}</option>`;
   row.innerHTML = `
-    <select class="dev-name">${opts}</select>
-    <input type="text" placeholder="Custom Appliance" class="dev-custom">
-    <input type="number" placeholder="Power (W)" class="dev-power">
-    <input type="number" placeholder="Hours/day" class="dev-hrs">
-    <button class="remove-btn">X</button>
+    <img class="icon" src="${initial.icon || 'https://cdn-icons-png.flaticon.com/512/565/565547.png'}" alt="icon" />
+    <select class="dev-select">
+      <option value="">-- select appliance --</option>
+      ${Object.keys(APPLIANCES).map(a=>`<option value="${a}">${a}</option>`).join('')}
+    </select>
+    <input class="dev-custom" placeholder="Or type appliance name" style="min-width:180px" />
+    <input class="dev-power" placeholder="Power (W)" style="width:110px" />
+    <input class="dev-hrs" placeholder="Hours/day" style="width:110px" />
+    <div class="ratings small"></div>
+    <button class="remove-btn">Remove</button>
   `;
-  const sel = row.querySelector('.dev-name');
+  // attach
+  devicesDiv.appendChild(row);
+  const sel = row.querySelector('.dev-select');
   const custom = row.querySelector('.dev-custom');
   const power = row.querySelector('.dev-power');
-  sel.addEventListener('change', () => {
-    if (sel.value) {
+  const hrs = row.querySelector('.dev-hrs');
+  const icon = row.querySelector('img.icon');
+  const ratingsDiv = row.querySelector('.ratings');
+
+  // when choose from dropdown
+  sel.addEventListener('change', ()=>{
+    const val = sel.value;
+    if(val){
+      custom.value = '';
       custom.disabled = true;
-      power.value = applianceWatts[sel.value];
+      const ap = APPLIANCES[val];
+      power.value = ap.w;
+      icon.src = ap.icon;
+      ratingsDiv.innerHTML = `<span title="Rating">${ap.rating}★</span>`;
     } else {
       custom.disabled = false;
       power.value = '';
+      icon.src = 'https://cdn-icons-png.flaticon.com/512/565/565547.png';
+      ratingsDiv.innerHTML = '';
     }
   });
-  row.querySelector('.remove-btn').onclick = () => row.remove();
-  devicesDiv.appendChild(row);
-}
 
-// ----------- Calculate bill -----------
-function calculateBill(units, slabs) {
-  let total = 0, rem = units;
-  for (const [limit, rate] of slabs) {
-    const use = Math.min(rem, limit);
-    total += use * rate;
-    rem -= use;
-    if (rem <= 0) break;
-  }
-  return total;
-}
-
-document.getElementById('addDevice').onclick = createDeviceRow;
-document.getElementById('reset').onclick = () => { devicesDiv.innerHTML=''; document.getElementById('resultsArea').style.display='none'; };
-
-document.getElementById('calculate').onclick = () => {
-  const region = document.getElementById('region').value;
-  const slabs = regionSlabs[region];
-  const devices = Array.from(devicesDiv.querySelectorAll('.device-row')).map(r => ({
-    name: r.querySelector('.dev-name').value || r.querySelector('.dev-custom').value || "Unnamed",
-    power: parseFloat(r.querySelector('.dev-power').value) || 0,
-    hrs: parseFloat(r.querySelector('.dev-hrs').value) || 0
-  }));
-
-  if (!devices.length) { alert('Add at least one device'); return; }
-
-  let totalUnits = 0, html = '';
-  devices.forEach(d => {
-    const monthly = (d.power/1000)*d.hrs*30;
-    totalUnits += monthly;
-    html += `<p><strong>${d.name}</strong>: ${monthly.toFixed(2)} units/month</p>`;
+  // manual typing
+  custom.addEventListener('input', ()=>{
+    const name = custom.value.trim();
+    if(name){
+      sel.disabled = true;
+      const est = estimateWattsFromName(name);
+      power.value = est;
+      icon.src = 'https://cdn-icons-png.flaticon.com/512/565/565547.png';
+      ratingsDiv.innerHTML = ''; // unknown rating
+    } else {
+      sel.disabled = false;
+      power.value = '';
+      ratingsDiv.innerHTML = '';
+      icon.src = 'https://cdn-icons-png.flaticon.com/512/565/565547.png';
+    }
   });
-  const totalCost = calculateBill(totalUnits, slabs);
-  document.getElementById('deviceList').innerHTML = html;
-  document.getElementById('summaryContent').innerHTML = `
-    <p><strong>Monthly Units:</strong> ${totalUnits.toFixed(2)}</p>
-    <p><strong>Estimated Bill:</strong> ₹${totalCost.toFixed(2)}</p>
-  `;
-  document.getElementById('resultsArea').style.display = 'grid';
-};
 
-// ----------- AI Chat -----------
-document.getElementById('sendMsg').onclick = () => {
-  const msg = document.getElementById('userMsg').value.trim();
-  if (!msg) return;
-  const body = document.getElementById('chatBody');
-  body.innerHTML += `<div><strong>You:</strong> ${msg}</div>`;
-  let reply = "I’m not sure. Please rephrase your question.";
-  const m = msg.toLowerCase();
-  if (m.includes("tariff")) reply = "Tariff slabs define rates for different electricity usage ranges.";
-  else if (m.includes("reduce")) reply = "Switch off unused devices and use LED bulbs to reduce power usage.";
-  else if (m.includes("bill")) reply = "Your bill depends on the units used and region-specific rates.";
-  else if (m.includes("region")) reply = "Each region has its own tariff policy. Choose it from the dropdown.";
-  body.innerHTML += `<div><strong>AI:</strong> ${reply}</div>`;
-  document.getElementById('userMsg').value = '';
-  body.scrollTop = body.scrollHeight;
-};
+  row.querySelector('.remove-btn').addEventListener('click', ()=> row.remove());
+}
 
-// initial setup
+/* start with one row */
 createDeviceRow();
+
+/* add device button */
+addDeviceBtn.addEventListener('click', ()=> createDeviceRow());
+
+/* reset */
+resetBtn.addEventListener('click', ()=>{
+  devicesDiv.innerHTML = '';
+  createDeviceRow();
+  resultsArea.style.display = 'none';
+});
+
+/* calculate logic */
+calculateBtn.addEventListener('click', ()=>{
+  const regionKey = regionSelect.value || 'generic';
+  const rows = Array.from(document.querySelectorAll('.device-row'));
+  if(rows.length === 0){ alert(currentLang==='en' ? 'Add at least one appliance' : 'कृपया कम से कम एक उपकरण जोड़ें'); return; }
+
+  const devices = rows.map(r=>{
+    const sel = r.querySelector('.dev-select');
+    const custom = r.querySelector('.dev-custom');
+    const power = parseFloat(r.querySelector('.dev-power').value) || 0;
+    const hrs = parseFloat(r.querySelector('.dev-hrs').value) || 0;
+    const name = sel.value || (custom.value.trim() || 'Unnamed Device');
+    const icon = r.querySelector('img.icon').src;
+    const rating = APPLIANCES[name] ? APPLIANCES[name].rating : (r.querySelector('.ratings').innerText ? parseInt(r.querySelector('.ratings').innerText) : null);
+    return { name, power, hrs, icon, rating };
+  });
+
+  // compute per appliance and totals
+  let totalDailyUnits = 0;
+  let totalMonthlyUnits = 0;
+  let totalInstalledKW = 0; // for fixed charge estimate - using sum of (power/1000) rounded to 1 decimal
+  const deviceHtmlParts = [];
+
+  devices.forEach(d=>{
+    const dailyUnits = (d.power / 1000) * d.hrs;
+    const weeklyUnits = dailyUnits * 7;
+    const monthlyUnits = dailyUnits * 30;
+    totalDailyUnits += dailyUnits;
+    totalMonthlyUnits += monthlyUnits;
+    totalInstalledKW += d.power / 1000;
+
+    // compute cost for this appliance monthly using progressive slab — but typically slabs apply on total; we show individual cost for info using region rates by applying same progressive function to individual monthlyUnits
+    const billForAppliance = computeProgressiveBill(monthlyUnits, regionKey, 0);
+    deviceHtmlParts.push(`
+      <div class="appliance-row">
+        <div style="display:flex; gap:10px; align-items:center;">
+          <img src="${d.icon}" style="width:36px;height:36px;border-radius:6px;">
+          <div>
+            <div style="font-weight:600">${d.name} ${d.rating ? `<span style="color:#f59e0b">(${d.rating}★)</span>` : ''}</div>
+            <div class="small">Power: ${d.power} W • ${d.hrs} hrs/day</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="small">Daily: ${dailyUnits.toFixed(2)} u</div>
+          <div class="small">Weekly: ${weeklyUnits.toFixed(2)} u</div>
+          <div style="font-weight:700">Monthly: ${monthlyUnits.toFixed(2)} u</div>
+          <div class="small">Est. Cost: ₹${billForAppliance.cost.toFixed(2)}</div>
+        </div>
+      </div>
+    `);
+  });
+
+  // overall bill using totalMonthlyUnits, include fixed charge using installed KW rounded up to nearest 0.5 or 1 as desired
+  const installedKWRounded = Math.ceil(totalInstalledKW * 10) / 10; // round up to 0.1 kW
+  const overall = computeProgressiveBill(totalMonthlyUnits, regionKey, installedKWRounded);
+  const energyCost = overall.energyCost;
+  const fixedCharge = overall.fixedCharge;
+  const totalCost = overall.cost;
+
+  // generate suggestion if slabs exceeded
+  const region = REGION_DATA[regionKey] || REGION_DATA.generic;
+  const slabLimits = region.slabs.map(s=>s.upto).filter(u=> isFinite(u));
+  const crossed = slabLimits.filter(lim=> totalMonthlyUnits > lim);
+  let suggestionsHtml = '';
+  if(crossed.length === 0){
+    suggestionsHtml = `<div class="small">${t('tipsHeading')}: ${currentLang==='en' ? 'You are within the lowest slab. Keep it up!' : ''}</div>`;
+  } else {
+    suggestionsHtml = `<div style="font-weight:700;margin-bottom:6px">${t('suggestionHeader')}</div>`;
+    // strategy: sort devices by monthly consumption and propose reducing hours for top devices
+    const devicesSorted = devices.slice().sort((a,b)=> (b.power*b.hrs) - (a.power*a.hrs));
+    let excess = totalMonthlyUnits - crossed[0]; // first crossed threshold - propose to reduce to first crossed threshold (closest lower)
+    // but better propose reduce to each crossed threshold and show potential savings for that threshold
+    const target = crossed[0]; // reduce to at least below first crossed slab limit
+    let remainingExcess = totalMonthlyUnits - target;
+    let recs = [];
+    let savedUnits = 0;
+    for(const d of devicesSorted){
+      if(remainingExcess <= 0) break;
+      const monthlyOfD = (d.power/1000)*d.hrs*30;
+      const reducible = Math.min(monthlyOfD, remainingExcess);
+      const reduceHrs = reducible / ((d.power/1000)*30 || 1);
+      if(reduceHrs > 0.05) {
+        recs.push( { name: d.name, newHrs: Math.max(0, d.hrs - reduceHrs), savedUnits: reducible } );
+        savedUnits += reducible;
+        remainingExcess -= reducible;
+      }
+    }
+    if(recs.length === 0){
+      suggestionsHtml += `<div class="small">${ currentLang==='en' ? 'Reduce use of high-power appliances (AC, Water Heater) to lower slab.' : ''}</div>`;
+    } else {
+      suggestionsHtml += `<ul>${recs.map(r=>`<li>${ currentLang==='en' ? `Use ${r.name} for ~${r.newHrs.toFixed(1)} hrs/day to save ${r.savedUnits.toFixed(1)} units/month` : r.name + ' का उपयोग ' + r.newHrs.toFixed(1) + ' घं/दिन तक करें और ' + r.savedUnits.toFixed(1) + ' यूनिट बचाएँ' }</li>`).join('')}</ul>`;
+    }
+    // estimate money saved if savedUnits reduced
+    const hypothetical = computeProgressiveBill(totalMonthlyUnits - savedUnits, regionKey, installedKWRounded);
+    const moneySaved = Math.max(0, overall.cost - hypothetical.cost);
+    suggestionsHtml += `<div style="margin-top:8px; font-weight:600">${t('savingsEstimate')}: ₹${moneySaved.toFixed(2)}</div>`;
+  }
+
+  // Tips & awareness block
+  const tipsList = [
+    currentLang==='en' ? "Use LED bulbs instead of incandescent." : (currentLang==='hi' ? "इन्कैंडेसेंट की जगह LED बल्ब का उपयोग करें।" : currentLang==='te' ? "ఇన్కండెసంట్ బదులు LED బల్బ్ ఉపయోగించండి." : "இன்காண்டஸண்ட் தோட்டாகங்கள் பத்தியிலிருந்து LED பயன்படுத்தவும்."),
+    currentLang==='en' ? "Run washing machine and dishwasher in full load." : (currentLang==='hi' ? "वॉशिंग मशीन और डिशवॉशर को पूरा लोड होने पर चलाएँ।" : currentLang==='te' ? "వాషింగ్ మెషిన్‌ను పూర్తి లోడుతో నడపండి." : "வாஷிங் மெஷினை முழு சுமையுடன் இயக்கவும்."),
+    currentLang==='en' ? "Maintain AC filters; set temperature to 24–26°C." : (currentLang==='hi' ? "AC फिल्टर मेंटेन करें; तापमान 24–26°C रखें।" : currentLang==='te' ? "AC ఫిల్టర్లు నిర్వహించండి; 24–26°C ఉంచండి." : "AC குழாய்களை பராமரிக்கவும்; 24–26°C அமைக்கவும்.")
+  ];
+
+  // Update DOM: device listing, summary, suggestions, tips
+  deviceListEl.innerHTML = deviceHtmlParts.join('');
+  summaryContent.innerHTML = `
+    <div><strong>${ currentLang==='en' ? 'Total Daily Units' : (currentLang==='hi' ? 'कुल दैनिक यूनिट' : currentLang==='te' ? 'అన్ని దిన యూనిట్లు' : 'மொத்த தினசரி யூனிட்கள்') }:</strong> ${totalDailyUnits.toFixed(2)} u</div>
+    <div><strong>${ currentLang==='en' ? 'Total Weekly Units' : (currentLang==='hi' ? 'कुल साप्ताहिक यूनिट' : currentLang==='te' ? 'వారపత్రి యూనిట్లు' : 'மொத்த வாராந்திர யூனிட்கள்') }:</strong> ${(totalDailyUnits*7).toFixed(2)} u</div>
+    <div><strong>${ currentLang==='en' ? 'Total Monthly Units' : (currentLang==='hi' ? 'कुल मासिक यूनिट' : currentLang==='te' ? 'மாதపు யூனிட్లు' : 'மாதாந்திர யூனிட்கள்') }:</strong> ${totalMonthlyUnits.toFixed(2)} u</div>
+    <div style="margin-top:8px"><strong>${ currentLang==='en' ? 'Energy Charges' : (currentLang==='hi' ? 'ऊर्जा शुल्क' : currentLang==='te' ? 'శక్తి ఛార్జీలు' : 'மின்சாரம் கட்டணம்') }:</strong> ₹${energyCost.toFixed(2)}</div>
+    <div><strong>${ currentLang==='en' ? 'Fixed Charges' : (currentLang==='hi' ? 'फिक्स्ड चार्ज' : currentLang==='te' ? 'స్థిర ఛార్జీలు' : 'நிலையான கட்டணங்கள்') }:</strong> ₹${fixedCharge.toFixed(2)} (${installedKWRounded.toFixed(1)} kW × ₹${(REGION_DATA[regionKey]||REGION_DATA.generic).fixedPerKW}/kW)</div>
+    <div style="font-size:18px;margin-top:8px;font-weight:800">${ currentLang==='en' ? 'Total Estimated Bill' : (currentLang==='hi' ? 'कुल अनुमानित बिल' : currentLang==='te' ? 'మొత్తం అంచనా బిల్' : 'மொத்த மதிப்பிடப்பட்ட பில்') }: ₹${totalCost.toFixed(2)}</div>
+  `;
+  suggestionsEl.innerHTML = suggestionsHtml;
+  tipsEl.innerHTML = `<h4>${t('tipsHeading')}</h4><ul>${tipsList.map(x=>`<li>${x}</li>`).join('')}</ul><div style="margin-top:8px;font-size:13px;color:#555">${t('ratingInfo5')}</div><div style="font-size:13px;color:#777">${t('ratingInfo3')}</div>`;
+
+  resultsArea.style.display = 'grid';
+});
+
+/* ===========================
+   AI CHAT: rule-based + fallback (multilingual)
+   The assistant tries to answer many question types using keywords,
+   region data, and templates in the selected language.
+   =========================== */
+const aiChat = document.getElementById('aiChat');
+const aiBody = document.getElementById('aiBody');
+const aiInput = document.getElementById('aiInput');
+const aiSend = document.getElementById('aiSend');
+const aiTitle = document.getElementById('aiTitle');
+const aiClose = document.getElementById('aiClose');
+
+aiClose.addEventListener('click', ()=> aiChat.style.display = 'none');
+document.getElementById('helpBtn').addEventListener('click', ()=> aiChat.style.display = 'flex');
+
+function pushUserMsg(txt){
+  const d = document.createElement('div'); d.className='msg-user'; d.innerHTML = `<strong>You:</strong> ${txt}`; aiBody.appendChild(d); aiBody.scrollTop = aiBody.scrollHeight;
+}
+function pushBotMsg(txt){
+  const d = document.createElement('div'); d.className='msg-bot'; d.innerHTML = `<strong>Assistant:</strong> ${txt}`; aiBody.appendChild(d); aiBody.scrollTop = aiBody.scrollHeight;
+}
+
+function aiAnswerRaw(question){
+  const q = question.toLowerCase();
+  const regionKey = regionSelect.value;
+  const region = REGION_DATA[regionKey] || REGION_DATA.generic;
+  // keyword matching
+  if(q.includes('slab') || q.includes('slabs') || q.includes('टैरिफ') || q.includes('स्लैब') || q.includes('స్లాబ్') || q.includes('சிலப்')){
+    // return region slabs info
+    const lines = region.slabs.map(s => {
+      const up = isFinite(s.upto) ? `≤ ${s.upto} units` : `> ${region.slabs[region.slabs.length-2]?.upto || 0} units`;
+      return `${up}: ₹${s.rate.toFixed(2)}/unit`;
+    });
+    return (currentLang==='en' ? `Region (${regionKey}) slabs:\n` : '') + lines.join(' • ');
+  }
+  if(q.includes('reduce') || q.includes('save') || q.includes('बच') || q.includes('किस طرح') || q.includes('తగ్గ')):
+    return currentLang==='en'
+      ? "Ways to reduce: use LED bulbs, switch off idle appliances, maintain AC filters, use energy-efficient (5★) appliances, avoid using heavy loads during peak hours."
+      : currentLang==='hi'
+        ? "बचाने के तरीके: LED बल्ब का उपयोग करें, बेकार उपकरण बंद करें, AC फिल्टर मेंटेन रखें, ऊर्जाक्षम 5★ उपकरण उपयोग करें।"
+        : currentLang==='te'
+          ? "తగ్గించే మార్గాలు: LED బల్బ్‌లు వాడండి, అవసరం కాని పరికరాలు ఆపండి, AC ఫిల్టర్లు చూసుకోండి, 5★ పరికరాలు వాడు."
+          : "சேமித்தல் வழிகள்: LED light, பயன்படுத்தாத சாதனங்களை அணை, AC फिल்டர் பராமரிப்பு, 5★ சாதனங்கள்.";
+  if(q.includes('5') && q.includes('star') || q.includes('5★') || q.includes('5 स्टार') || q.includes('5 స్టార్')){
+    return currentLang==='en' ? "5-star rated appliances are more energy efficient; replacing an old 3-star appliance with a 5-star one can reduce energy consumption substantially over time." :
+           currentLang==='hi' ? "5★ रेटेड उपकरण अधिक ऊर्जा-कुशल होते हैं; 3★ की जगह 5★ लगाने से लंबी अवधि में बचत होगी।" :
+           currentLang==='te' ? "5★ పరికరాలు శక్తి-సంఖ్య తక్కువగా ఉంటాయి; 3★ను 5★తో మారుస్తే ఆదా ఉంటుంది." :
+           "5★ சாதனங்கள் மின்சார சேமிப்பில் சிறந்தவை; 3★ இடத்தை 5★ மூலம் மாற்றுதல் நீண்ட கால சேமிப்பு தரும்.";
+  }
+  if(q.includes('3') && q.includes('star') || q.includes('3★') || q.includes('3 स्टार')){
+    return currentLang==='en' ? "3-star appliances are less efficient; they work but consume more energy — consider replacing if used many hours daily." :
+           currentLang==='hi' ? "3★ उपकरण कम कुशल होते हैं — यदि आप उन्हें अधिक घंटे चलाते हैं तो बदलने पर विचार करें।" :
+           currentLang==='te' ? "3★ పరికరాలు తక్కువ సమర్థవంతం — ఎక్కువ గంటలు ఉపయోగిస్తే మార్చండి." :
+           "3★ சாதனங்கள் குறைந்த திறன் — நீண்ட அவதியில் மாற்ற பரிந்துரைக்கப்படுகிறது.";
+  }
+  if(q.includes('bill') || q.includes('how much') || q.includes('कितना') || q.includes('బిల్')){
+    // if calculation already done, report latest summary
+    if(resultsArea.style.display !== 'none'){
+      const totText = summaryContent.innerText || '—';
+      return currentLang==='en' ? `Current calculation summary:\n${totText}` :
+             currentLang==='hi' ? `वर्तमान गणना सारांश:\n${totText}` :
+             currentLang==='te' ? `ప్రస్తుత లెక్కింపు సారాంశం:\n${totText}` :
+             `பரிந்துரைகள்:\n${totText}`;
+    } else {
+      return currentLang==='en' ? "Please calculate the bill first — add appliances, set hours, then click Calculate." :
+             currentLang==='hi' ? "कृपया पहले गणना करें — उपकरण जोड़ें और घंटे डालें।" :
+             currentLang==='te' ? "దయచేసి ముందుగా లెక్కించండి — పరికరాలను జోడించండి." :
+             "தயவுசெய்து முதலில் கணக்கிடவும் - சாதனங்களை சேர்க்கவும்.";
+    }
+  }
+  if(q.includes('fixed') || q.includes('fixed charge') || q.includes('फिक्स्ड') || q.includes('नियमित शुल्क')){
+    const fc = (REGION_DATA[regionKey] || REGION_DATA.generic).fixedPerKW;
+    return currentLang==='en' ? `Fixed charge for region (${regionKey}): ₹${fc} per kW (applied to installed load).` :
+           currentLang==='hi' ? `फिक्स्ड चार्ज: ₹${fc}/kW (इंस्टॉल्ड लोड पर लागू).` :
+           currentLang==='te' ? `నిర్దిష్ట ఛార్జ్: ₹${fc}/kW.` :
+           `நிலையான கட்டணம்: ₹${fc}/kW.`;
+  }
+  // fallback: produce helpful generic answer in chosen language
+  if(currentLang === 'en'){
+    return `I can help explain tariffs, slabs, how to reduce your bill, or appliance ratings. Example: "What are Delhi slabs?", "How to reduce AC consumption?", "Why fixed charge?"`;
+  } else if(currentLang === 'hi'){
+    return `मैं टैरिफ, स्लैब, बिल बचाने व उपकरण रेटिंग समझा सकता हूँ। उदाहरण: "दिल्ली के स्लैब क्या हैं?", "बिल कैसे कम करें?"`;
+  } else if(currentLang === 'te'){
+    return `నేను టారిఫ్‌లు, స్లాబ్‌లు, బిల్ తగ్గించడం లేదా పరికరం స్థాయిలు వివరించగలన. ఉదా: "డెల్హీ స్లాబ్స్ ఎంటి?"`;
+  } else {
+    return `நான் கட்டணங்கள், பலகைகள், மின் கட்டணத்தை குறைப்பது போன்றவற்றைப் விளக்க முடியும். உதா: "டெல்லி சப்ஸ் என்ன?"`;
+  }
+}
+
+/* send AI message */
+aiSend.addEventListener('click', ()=>{
+  const q = aiInput.value.trim();
+  if(!q) return;
+  pushUserMsg(q);
+  aiInput.value = '';
+  const ans = aiAnswerRaw(q);
+  pushBotMsg(ans);
+});
+
+/* allow enter key */
+aiInput.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){ aiSend.click(); e.preventDefault(); }
+});
+
+/* AI open/close */
+document.getElementById('helpBtn').addEventListener('click', ()=> { aiChat.style.display = 'flex'; });
+aiChat.style.display = 'none';
+
+/* language change */
+langSelect.addEventListener('change', ()=>{
+  currentLang = langSelect.value;
+  applyTranslations();
+  // change AI welcome in chosen language
+  document.getElementById('aiWelcome').innerText = t('aiWelcome');
+  document.getElementById('aiTitle').innerText = (currentLang==='en' ? 'Energy Assistant' : currentLang==='hi' ? 'ऊर्जा सहायक' : currentLang==='te' ? 'ఎనర్జీ అసిస్టెంట్' : 'மின்சார உதவியாளர்');
+});
+
+/* initialize translations */
+applyTranslations();
+document.getElementById('aiTitle').innerText = 'Energy Assistant';
+
+/* END */
 </script>
 </body>
 </html>
